@@ -14,9 +14,9 @@ class Matrix{
         }
     }
     map(func){
-        this.data = this.data.map((arr,i) => {
-            return arr.map((num,j) =< {
-                return fuc(num, i, j);
+        this.data = this.data.map((arr, i) => {
+            return arr.map((num, j) => {
+                return func(num, i, j);
                })
         })
         return this;
@@ -26,5 +26,22 @@ class Matrix{
         matrix.map((num, i, j) => {
             return A.data[i][j] + B.data[i][j]
         });
+        return matrix; 
+    }
+    static multiply(A, B){
+        var matrix = new Matrix(A.rows, B.cols);
+
+        matrix.map((num, i, j) => {
+            let sum = 0
+            for(let k=0; k<B.rows; k++){
+                let elm1 = A.data[i][k];
+                let elm2 = B.data[k][j];
+                sum += elm1 * elm2;
+
+            }
+            return sum;
+        })
+        console.log(matrix);
+        return matrix;
     }
 }
