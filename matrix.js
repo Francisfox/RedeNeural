@@ -43,7 +43,7 @@ class Matrix{
         return matrix; 
     }
     static multiply(A, B){
-        var matrix = new Matrix(A.rows, A.cols);
+        var matrix = new Matrix(A.rows, B.cols);
 
         matrix.map((num, i, j) => {
             let sum = 0
