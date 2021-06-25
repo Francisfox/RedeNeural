@@ -13,4 +13,7 @@ class Matrix{
             this.data.push(arr);
         }
     }
+    static add(A,B){
+
+    }
 }
