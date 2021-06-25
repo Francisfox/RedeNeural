@@ -8,10 +8,24 @@ class Matrix{
         for(let i=0; i<rows; i++){
             let arr = [];           
             for(let j=0; j<cols; j++){
-                arr.push(Math.floor(Math.random()*10))
+                arr.push(0)
             }
             this.data.push(arr);
         }
+    }
+    static arrayToMatrix(arr){
+        let matrix = new Matrix(arr.length, 1);
+        matrix.map((elm, i, j) => {
+            return arr[i];
+        })
+    }
+    print(){
+        console.table(this.data);
+    }
+    randomize(){
+        this.map((elm, i, j) => {
+            return Math.random() * 2 - 1;
+        });
     }
     map(func){
         this.data = this.data.map((arr, i) => {
@@ -21,7 +35,7 @@ class Matrix{
         })
         return this;
     }
-    static add(A,B){
+    static add(A, B) {
         var matrix = new Matrix(A.rows, A.cols);
         matrix.map((num, i, j) => {
             return A.data[i][j] + B.data[i][j]
@@ -29,19 +43,17 @@ class Matrix{
         return matrix; 
     }
     static multiply(A, B){
-        var matrix = new Matrix(A.rows, B.cols);
+        var matrix = new Matrix(A.rows, A.cols);
 
         matrix.map((num, i, j) => {
             let sum = 0
-            for(let k=0; k<B.rows; k++){
+            for(let k = 0; k < A.cols; k++){
                 let elm1 = A.data[i][k];
                 let elm2 = B.data[k][j];
                 sum += elm1 * elm2;
-
             }
             return sum;
         })
-        console.log(matrix);
         return matrix;
     }
 }
