@@ -13,7 +13,18 @@ class Matrix{
             this.data.push(arr);
         }
     }
+    map(func){
+        this.data = this.data.map((arr,i) => {
+            return arr.map((num,j) =< {
+                return fuc(num, i, j);
+               })
+        })
+        return this;
+    }
     static add(A,B){
-
+        var matrix = new Matrix(A.rows, A.cols);
+        matrix.map((num, i, j) => {
+            return A.data[i][j] + B.data[i][j]
+        });
     }
 }
