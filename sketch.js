@@ -13,17 +13,17 @@ function setup() {
     // XOR Problem
     dataset = {
         inputs:
-            [[1, 1],
-             [1, 0],
-             [0, 1],
-             [0, 0]
-            ],
+        [   [1, 1],
+            [1, 0],
+            [0, 1],
+            [0, 0]
+        ],
         outputs:
-            [[1],
-             [0],
-             [1],
-             [0]
-            ]
+        [   [1],
+            [0],
+            [1],
+            [0]
+        ]
     }
 }
 
@@ -35,11 +35,9 @@ function draw() {
         }
         if (nn.predict(dataset.inputs[input1]) > 0.98 && nn.predict(dataset.inputs[input4]) < 0.04) {
             train = false;
-            console.log(nn.predict(dataset.inputs[input1]));
-            console.log(nn.predict(dataset.inputs[input2]));
-            console.log(nn.predict(dataset.inputs[input3]));
-            console.log(nn.predict(dataset.inputs[input4]));
-        
+            for(var input = 0; input < 4; input++) {
+                console.log(nn.predict(dataset.inputs[input]));
+            }       
             console.log("terminou");
         }
     }
