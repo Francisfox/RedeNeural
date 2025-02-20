@@ -54,12 +54,6 @@ function draw() {
         }
     }
 
-    // Desenhar os pontos e exibir previsões
-    drawPredictions();
-
-    // Exibir a caixa de iteração
-    drawIterationBox();
-
     // Adicionar sinalização de fim de treinamento
     if (!train) {
         fill(0, 255, 0);
@@ -74,6 +68,9 @@ function draw() {
 
     // Exibir a caixa de iteração
     drawIterationBox();
+
+    drawIterationBoxRetorno1();
+    drawIterationBoxRetorno2();
 }
 
 function drawPredictions() {
@@ -115,4 +112,28 @@ function drawIterationBox() {
     textSize(16);
     textAlign(LEFT, TOP);
     text("Iterações: " + iterations, 20, height - 50); // Posicionando o texto na parte inferior
+}
+function drawIterationBoxRetorno1() {
+    // Caixa de fundo para as iterações
+    fill(0, 150);
+    noStroke();
+    rect(10, height - 60, 200, 50); // Mudando a posição da caixa para a parte inferior
+
+    // Texto exibindo a iteração atual
+    fill(255);
+    textSize(16);
+    textAlign(LEFT, TOP);
+    text("Instruções ", 300, 150); // Posicionando o texto na parte inferior
+}
+function drawIterationBoxRetorno2() {
+    // Caixa de fundo para as iterações
+    fill(0, 150);
+    noStroke();
+    rect(10, height - 60, 200, 50); // Mudando a posição da caixa para a parte inferior
+
+    // Texto exibindo a iteração atual
+    fill(255);
+    textSize(16);
+    textAlign(LEFT, TOP);
+    text("Instruções ", 300, 350); // Posicionando o texto na parte inferior
 }
