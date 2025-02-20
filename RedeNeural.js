@@ -88,6 +88,7 @@ class RedeNeural {
         output.map(sigmoid);
         output = Matrix.MatrixToArray(output);
 
-        return output;
+        // Adicionando arredondamento para 0 ou 1
+        return output.map(x => parseFloat(x.toFixed(2)));
     }
 }
