@@ -1,13 +1,23 @@
 let train = true;
-let iterations = 0; // Contador de iterações
+let iterations = 0; 
+
+let input1, input2, predictButton, resultText;
+let nn; // Variável para a rede neural
 
 function setup() {
     createCanvas(500, 500);
     background(0);
 
-    nn = new RedeNeural(2, 5, 1);
+    // Certifique-se de que a classe RedeNeural está carregada
+    try {
+        nn = new RedeNeural(2, 10, 1);
+    } catch (e) {
+        console.error("Erro ao criar a rede neural:", e);
+        return;
+    }
 
-    // Problema XOR
+    console.log("Rede Neural inicializada!");
+
     dataset = {
         inputs: [
             [0, 0],
@@ -17,11 +27,30 @@ function setup() {
         ],
         outputs: [
             [0],
-            [1],
-            [1],
-            [0]
+            [0],
+            [0],
+            [1]
         ]
     };
+
+    // Criar inputs para usuário inserir valores
+    input1 = createInput('0');
+    input1.position(20, 20);
+    input1.size(40);
+
+    input2 = createInput('0');
+    input2.position(80, 20);
+    input2.size(40);
+
+    // Botão para prever
+    predictButton = createButton('Prever');
+    predictButton.position(140, 20);
+    predictButton.mousePressed(makePrediction);
+
+    // Texto do resultado
+    resultText = createP('Resultado: ');
+    resultText.position(20, 40);
+    resultText.style('color', 'white');
 }
 
 function draw() {
@@ -39,7 +68,7 @@ function draw() {
         for (let input = 0; input < 4; input++) {
             let prediction = nn.predict(dataset.inputs[input]);
 
-            if (Math.abs(prediction - dataset.outputs[input][0]) > 0.02) {
+            if (Math.abs(prediction[0] - dataset.outputs[input][0]) > 0.02) {
                 allConditionsMet = false;
             }
         }
@@ -50,11 +79,10 @@ function draw() {
             for (let input = 0; input < 4; input++) {
                 console.log(nn.predict(dataset.inputs[input]));
             }
-            console.log("terminou");
+            console.log("Treinamento concluído");
         }
     }
 
-    // Adicionar sinalização de fim de treinamento
     if (!train) {
         fill(0, 255, 0);
         textSize(20);
@@ -62,78 +90,62 @@ function draw() {
         text("Concluído!", width / 2, height - 20);
     }
 
-
-    // Desenhar os pontos e exibir previsões
     drawPredictions();
-
-    // Exibir a caixa de iteração
     drawIterationBox();
+}
 
-    drawIterationBoxRetorno1();
-    drawIterationBoxRetorno2();
+// Função para prever baseado no input do usuário
+function makePrediction() {
+    let val1 = parseFloat(input1.value());
+    let val2 = parseFloat(input2.value());
+
+    if (isNaN(val1) || isNaN(val2)) {
+        resultText.html("Entrada inválida!");
+        return;
+    }
+
+    let output = nn.predict([val1, val2]);
+
+    if (Array.isArray(output)) {
+        resultText.html("Resultado: " + output[0].toFixed(2));
+    } else {
+        console.error("Erro: saída inesperada de nn.predict()");
+    }
 }
 
 function drawPredictions() {
-    let spacing = 100; // Espaçamento entre os pontos
-    let offsetX = 200; // Posição horizontal fixa para centralizar os pontos
-    let offsetY = 100; // Posição vertical inicial para o primeiro ponto
+    let spacing = 100;
+    let offsetX = 200;
+    let offsetY = 100;
 
     for (let i = 0; i < 4; i++) {
         let x = dataset.inputs[i][0];
         let y = dataset.inputs[i][1];
 
-        let pred = nn.predict([x, y])[0]; // Pegando a predição da rede neural
-        let colorValue = (pred > 0.5) ? 255 : 0; // Se a previsão for maior que 0.5, é 1 (branco), caso contrário 0 (preto)
+        let pred = nn.predict([x, y]);
+        let colorValue = (pred[0] > 0.5) ? 255 : 0;
 
-        let posX = offsetX; // Posição horizontal fixa
-        let posY = offsetY + i * spacing; // Posição vertical para os pontos (um abaixo do outro)
+        let posX = offsetX;
+        let posY = offsetY + i * spacing;
 
-        // Cor do círculo baseada na predição
         fill(colorValue);
         stroke(255);
         ellipse(posX, posY, 50, 50);
 
-        // Exibir o valor previsto dentro do círculo
         fill(255 - colorValue);
         textAlign(CENTER, CENTER);
         textSize(16);
-        text(pred.toFixed(2), posX, posY);
+        text(pred[0].toFixed(2), posX, posY);
     }
 }
 
 function drawIterationBox() {
-    // Caixa de fundo para as iterações
     fill(0, 150);
     noStroke();
-    rect(10, height - 60, 200, 50); // Mudando a posição da caixa para a parte inferior
+    rect(10, height - 60, 200, 50);
 
-    // Texto exibindo a iteração atual
     fill(255);
     textSize(16);
     textAlign(LEFT, TOP);
-    text("Iterações: " + iterations, 20, height - 50); // Posicionando o texto na parte inferior
-}
-function drawIterationBoxRetorno1() {
-    // Caixa de fundo para as iterações
-    fill(0, 150);
-    noStroke();
-    rect(10, height - 60, 200, 50); // Mudando a posição da caixa para a parte inferior
-
-    // Texto exibindo a iteração atual
-    fill(255);
-    textSize(16);
-    textAlign(LEFT, TOP);
-    text("Instruções ", 300, 150); // Posicionando o texto na parte inferior
-}
-function drawIterationBoxRetorno2() {
-    // Caixa de fundo para as iterações
-    fill(0, 150);
-    noStroke();
-    rect(10, height - 60, 200, 50); // Mudando a posição da caixa para a parte inferior
-
-    // Texto exibindo a iteração atual
-    fill(255);
-    textSize(16);
-    textAlign(LEFT, TOP);
-    text("Instruções ", 300, 350); // Posicionando o texto na parte inferior
+    text("Iterações: " + iterations, 20, height - 50);
 }
