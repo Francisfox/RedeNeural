@@ -90,9 +90,13 @@ function draw() {
         text("Concluído!", width / 2, height - 20);
     }
 
+    drawPredictionsOutput();
     drawPredictions();
     drawIterationBox();
+    
+    
 }
+
 
 // Função para prever baseado no input do usuário
 function makePrediction() {
@@ -113,10 +117,10 @@ function makePrediction() {
     }
 }
 
-function drawPredictions() {
-    let spacing = 100;
-    let offsetX = 200;
-    let offsetY = 100;
+function drawPredictionsOutput() {
+    let spacing = 60;
+    let offsetX = 400;
+    let offsetY = 150;
 
     for (let i = 0; i < 4; i++) {
         let x = dataset.inputs[i][0];
@@ -138,7 +142,35 @@ function drawPredictions() {
         text(pred[0].toFixed(2), posX, posY);
     }
 }
+function drawPredictions() {
+    let spacing = 60;
+    let offsetX = 200;
+    let offsetY = 100;
 
+    for (let i = 0; i < 5; i++) {
+        let x = 0;
+        let y = 0;
+
+        let pred = nn.predict([x, y]);
+        let colorValue = (pred[0] > 0.5) ? 255 : 0;
+
+        let posX = offsetX;
+        let posY = offsetY + i * spacing;
+
+        fill(colorValue);
+        stroke(255);
+        ellipse(posX, posY, 50, 50);
+
+        fill(255 - colorValue);
+        textAlign(CENTER, CENTER);
+        textSize(16);
+        text(pred[0].toFixed(2), posX, posY);
+    }
+    // Desenhar linhas entre os círculos
+    stroke(100, 100, 255); // Cor azulada para destacar as conexões
+    strokeWeight(2);
+    line(200, 150, 400, 150);
+}
 function drawIterationBox() {
     fill(0, 150);
     noStroke();
